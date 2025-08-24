@@ -1,4 +1,4 @@
-
+import random
 
 class Dice:
     def __init__(self, dice1, dice2, total):
@@ -6,8 +6,19 @@ class Dice:
         self.__dice2 = dice2
         self.__total = total
 
-    def throw_dice():
-        ...
+    def throw_dice(self):
+        dice1 = random.randint(1, 6)
+        dice2 = random.randint(1, 6)
+        
+        if(dice1 == dice2):
+            total = dice1 * 4
+        
+        total = dice1 + dice2
+
+        self.__dice1 = dice1
+        self.__dice2 = dice2
+        self.__total = total
+
 
     def __str__(self):
         return f"Valor dado 1: {self.__dice1}, Valor dado 2: {self.__dice2}, Valor Total: {self.__total}"
