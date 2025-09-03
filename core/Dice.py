@@ -19,6 +19,20 @@ class Dice:
         self.__dice2 = dice2
         self.__total = total
 
+    def get_dice1(self):
+       
+        return self.__dice1
+    
+    def get_dice2(self):
+        
+        return self.__dice2
+    
+    def get_total(self):
+
+        return self.__total
+
+
+
 
     def __str__(self):
         return f"Valor dado 1: {self.__dice1}, Valor dado 2: {self.__dice2}, Valor Total: {self.__total}"
