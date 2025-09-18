@@ -1,36 +1,19 @@
-from Player import Player
 
 class Checker:
-    def __init__(self, token, player: Player, position):
-        self.__token = token
+    #Jugador 1: X o Negro
+    #Jugador 2: O o Blanco
+    #player puede tomar valores como 1 o 2
+    def __init__(self, player):
         self.__player = player
-        self.__position = position
-        self.__bar = False
-        self.__out = False
 
-    def get_token(self):
-        return self.__token
+    def get_player(self):
+        return self.__player
     
-    def get_position(self):
-        return self.__position
 
-    def set_position(self, position):
-        self.__position = position
+    def __repr__(self):
+        player = self.get_player()
 
-    def validate_position(self):
-        pass
-
-    def move(self, position):
-        self.set_position(position)
-
-    def move_to_bar(self):
-        self.__position = None
-        self.__bar = True
-
-    def move_out(self):
-        self.__position = None
-        self.__out = True
-
-
-    def reset(self):
-        pass
+        if player == 1:
+            return 'X'
+        else:
+            return 'O'
