@@ -5,7 +5,7 @@ class Checker:
         self.__color = color
         self.__player = player
         self.__position = position
-        self.__middle = False
+        self.__bar = False
         self.__out = False
 
     def get_color(self):
@@ -23,9 +23,9 @@ class Checker:
     def move(self, position):
         self.set_position(position)
 
-    def move_to_middle(self):
+    def move_to_bar(self):
         self.__position = None
-        self.__middle = True
+        self.__bar = True
 
     def move_out(self):
         self.__position = None
