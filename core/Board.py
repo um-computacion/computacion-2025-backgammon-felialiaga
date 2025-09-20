@@ -32,7 +32,8 @@ class Board:
 
     def get_board(self):
         #trae el tablero
-        ...
+        print("----- Tablero de juego -----")
+        
 
     def play(self):
         #hacer un movimiento
