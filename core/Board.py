@@ -4,7 +4,7 @@ class InvalidMOve(Exception):
 class InvalidPosition(Exception):
     pass
 
-from Checker import Checker
+from core.Checker import Checker
 
 class Board:
     #Jugador 1: X
