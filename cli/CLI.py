@@ -4,14 +4,19 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 
 from core.Board import Board
+from core.Game import Game
 
 while True:
-    print('Juego Backgammon')
+    print('Bienvenido a Backgammon')
     print("1. Iniciar Partida")
     print("2. Mostrar Tablero(provisorio)")
     print("10. Salir")
 
     opc = int(input('Ingrese una opcion: '))
+
+    if(opc == 1):
+        print("Jugador 1: X o Negro")
+        print("Jugador 2: O o Blanco")
 
     if(opc == 2):
         board = Board()
