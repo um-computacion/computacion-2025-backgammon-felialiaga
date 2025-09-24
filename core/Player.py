@@ -30,6 +30,13 @@ class Player:
     def number(self, number):
         self.__number = number
 
+        if number == 1:
+            self.__token = "X"
+        elif number == 2:
+            self.__token = "O"
+        else:
+            print('Debe ingresar o un 1 o un 2')#Lanzar excepcion IncorrectNumberPlayer
+
     @property
     def token(self):
         return self.__token
