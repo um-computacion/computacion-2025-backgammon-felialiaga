@@ -1,8 +1,6 @@
-class InvalidMOve(Exception):
-    pass
-
-class InvalidPosition(Exception):
-    pass
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from core.Checker import Checker
 
@@ -34,35 +32,77 @@ class Board:
         #trae el tablero
         print("----- Tablero de juego -----")
 
-        top = self.__points[12:24] #24 ya que el ultimo no se incluye 
+        top = self.__points[12:24]
+        bottom = self.__points[0:12][::-1]
 
-        print(" " + " ".join(f"{i + 13:>2}" for i in range(12)))
+        for i in top:
+            
+            if len(i) == 0:
+                    self.__points = ["|","|","|","|","|"]
+            if len(i) == 1:
+                self.__points = ["|","|","|","|"]
+            if len(i) == 2:
+                self.__points = ["|","|","|"]
+            if len(i) == 3:
+                self.__points = ["|","|"]
+            if len(i) == 4:
+                self.__points = ["|"]
+                
 
-        top = self.__points[12:24] #24 ya que el ultimo no se incluye 
+            print(i, end=" ")
+        print(" ")
+        print("----------------------------------------------------------------------------------------")
+        print(bottom)
 
-        for i in range(5):
-            line = []
-            for p in top:
-                if len(p) > i:
-                    line.append(str(p[i]))
-                else:
-                    line.append(".")
-            print("   " + " ".join(line))
 
-        print("----------------------------------------------------")
 
-        bottom = self.__points[0:12]
 
-        for i in range(0, 5):
-            line = []
-            for p in bottom:
-                if len(p) > i:
-                    line.append(str(p[i]))
-                else:
-                    line.append(".")
-            print("   " + " ".join(line))
 
-        print(" " + " ".join(f"{i + 1:>2}" for i in range(12)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        # top = self.__points[12:24] #24 ya que el ultimo no se incluye 
+
+        # print(" " + " ".join(f"{i + 13:>2}" for i in range(12)))
+
+        # top = self.__points[12:24] #24 ya que el ultimo no se incluye 
+
+        # for i in range(5):
+        #     line = []
+        #     for p in top:
+        #         if len(p) > i:
+        #             line.append(str(p[i]))
+        #         else:
+        #             line.append(".")
+        #     print("   " + " ".join(line))
+
+        # print("----------------------------------------------------")
+
+        # bottom = self.__points[0:12]
+
+        # for i in range(0, 5):
+        #     line = []
+        #     for p in bottom:
+        #         if len(p) > i:
+        #             line.append(str(p[i]))
+        #         else:
+        #             line.append(".")
+        #     print("   " + " ".join(line))
+
+        # print(" " + " ".join(f"{i + 1:>2}" for i in range(12)))
 
 
 
