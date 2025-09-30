@@ -34,76 +34,36 @@ class Board:
 
         top = self.__points[12:24]
         bottom = self.__points[0:12][::-1]
+        max_len = 5
 
         for i in top:
+            # Agregar barras en los espacios faltantes
+
+            n = len(i)
             
-            if len(i) == 0:
-                    self.__points = ["|","|","|","|","|"]
-            if len(i) == 1:
-                self.__points = ["|","|","|","|"]
-            if len(i) == 2:
-                self.__points = ["|","|","|"]
-            if len(i) == 3:
-                self.__points = ["|","|"]
-            if len(i) == 4:
-                self.__points = ["|"]
-                
-
-            print(i, end=" ")
-        print(" ")
-        print("----------------------------------------------------------------------------------------")
-        print(bottom)
+            if n < max_len:
+                i.extend(["|"] * (max_len - n))
 
 
+        for row in range(max_len):
+            #mostrar tablero por filas
+            for i in top:
+                print(i[row], end=" ")
+            print(" ")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        print("-------------------------------")
         
+        for i in bottom:
+            n = len(i)
 
-        # top = self.__points[12:24] #24 ya que el ultimo no se incluye 
+            if n < max_len:
+                i.extend(["|"] * (max_len - n))
 
-        # print(" " + " ".join(f"{i + 13:>2}" for i in range(12)))
-
-        # top = self.__points[12:24] #24 ya que el ultimo no se incluye 
-
-        # for i in range(5):
-        #     line = []
-        #     for p in top:
-        #         if len(p) > i:
-        #             line.append(str(p[i]))
-        #         else:
-        #             line.append(".")
-        #     print("   " + " ".join(line))
-
-        # print("----------------------------------------------------")
-
-        # bottom = self.__points[0:12]
-
-        # for i in range(0, 5):
-        #     line = []
-        #     for p in bottom:
-        #         if len(p) > i:
-        #             line.append(str(p[i]))
-        #         else:
-        #             line.append(".")
-        #     print("   " + " ".join(line))
-
-        # print(" " + " ".join(f"{i + 1:>2}" for i in range(12)))
-
+        for row in range(max_len):
+            for i in bottom:
+                print(i[row], end=" ")
+            print(" ")
 
 
 if __name__ == "__main__":
