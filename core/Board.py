@@ -44,26 +44,32 @@ class Board:
             if n < max_len:
                 i.extend(["|"] * (max_len - n))
 
+        for i in ["12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]:
+            print(i, end="  ")
+        print(" ")
 
         for row in range(max_len):
             #mostrar tablero por filas
             for i in top:
-                print(i[row], end=" ")
+                print(i[row], end="   ")
             print(" ")
 
+        print("- " * 23)
 
-        print("-------------------------------")
-        
         for i in bottom:
-            n = len(i)
+            #Aca lo primero que hago es calcular la cantidad de "|" que necesito agregar
+            n = max_len - len(i)
 
-            if n < max_len:
-                i.extend(["|"] * (max_len - n))
+            if n > 0:
+                i[:0] = ['|'] * n
 
         for row in range(max_len):
             for i in bottom:
-                print(i[row], end=" ")
+                print(i[row], end="   ")
             print(" ")
+
+        for i in ["11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", "00"]:
+            print(i, end="  ")
 
 
 if __name__ == "__main__":
