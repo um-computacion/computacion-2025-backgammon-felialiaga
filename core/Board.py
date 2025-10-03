@@ -71,6 +71,12 @@ class Board:
         for i in ["11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", "00"]:
             print(i, end="  ")
 
+    def get_bar(self):
+        return self.__bar
+    
+    def get_out(self):
+        return self.__out
+
 
 if __name__ == "__main__":
     board = Board()
