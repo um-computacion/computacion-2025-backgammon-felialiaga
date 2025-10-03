@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 
 from core.Board import Board
-from core.Game import Game
+# from core.Game import Game
 from core.Player import Player
 
 while True:

@@ -28,7 +28,7 @@ class TestDice(unittest.TestCase):
         dice = Dice
 
         dice1 = 4
-        dice2 = 4 
+        dice2 = 4   
 
         self.assertEqual(dice.get_total , 16)
 
