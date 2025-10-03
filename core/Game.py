@@ -1,13 +1,17 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from core.Board import Board
-from core.Dice import Dice
-from core.Player import Player
+# from core.Dice import Dice
+# from core.Player import Player
 
 class Game:
     def __init__(self):
         self.turn = ""
         self.__board = Board()
-        self.__dice = Dice()
-        self.__players = list[Player] = []
+        # self.__dice = Dice()
+        # self.__players = list[Player] = []
 
     def start_game(self):
         #Primero se hace el setup de los elementos
@@ -26,9 +30,31 @@ class Game:
         ...
         #Logica para el cambio de turno
 
-    def is_win(self):
-        ... 
+    def is_win(self): 
         #Logica para verificar si hay un ganador
+        player1 = len(self.__board.get_out()[1])
+        player2 = len(self.__board.get_out()[2])
+
+        #Cada una de las variables va a devolver la cantidad de fichas que tenemos afuera
+        #Los prints van a ser reemplazados por atributos
+        if player1 == 15:
+            print("Jugador 1 ha ganado")
+        if player2 == 15:
+            print("Jugador 2 ha ganado")
+        else:
+            print("Ninguno ha ganado, la partida sigue")
+
+
+if __name__ == "__main__":
+    game = Game()
+    game.is_win()
+
+
+
+
+
+
+
 
 
 #Reglas del Juego
