@@ -82,32 +82,37 @@ class Board:
     def valid_position(self, point, player: str):
         #Antes de validar la cantidad de fichas tengo que poder validar si son "X" o "O"
 
-        validPlayer = ""
+        cant = len(self.__points[point])
 
-        if len(self.__points[point]) > 1 and len(self.__points[point]) < 5:
-
-            for i in self.__points[point]:
-                if i == player:
-                    validPlayer = True
-
-        if validPlayer:
-            return True        
-
-        if len(self.__points[point]) == 0:
+        if cant == 0:
             return True
+
+        if cant > 1:
+            self.valid_player(point, player)
+
+        # if len(self.__points[point]) > 1:
+        #     self.valid_player(point, player)      
+
+        # if len(self.__points[point]) == 0:
+        #     return True
         
         # if len(self.__points[point]) == 1:
         #     #Aca tendria que mandar a la otra ficha al tablero
         #     ...
         
-    def valid_player(self, player):
+    def valid_player(self, pos, player: str):
         #Funcion para validar si un punto pertenece a un jugador o no
-        ...
+
+        if str(self.__points[pos][0]) == player:
+            return True
+        else:
+            return False
+
 
 
 
 
 if __name__ == "__main__":
     board = Board()
-    board.get_board()
-    print(board.valid_position(0,"X"))
+    # print(board.valid_position(0,"X"))
+    print(board.valid_player(6, "X"))
