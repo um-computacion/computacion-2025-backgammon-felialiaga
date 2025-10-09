@@ -71,6 +71,9 @@ class Board:
         for i in ["11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", "00"]:
             print(i, end="  ")
 
+    def get_points(self):
+        return self.__points
+
     def get_bar(self):
         return self.__bar
     
