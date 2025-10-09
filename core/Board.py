@@ -83,23 +83,26 @@ class Board:
         #Antes de validar la cantidad de fichas tengo que poder validar si son "X" o "O"
 
         cant = len(self.__points[point])
+        validPlayer = ""
 
-        if cant == 0:
-            return True
+        if cant == 1:
+            validPlayer = self.valid_player(point, player)
+
+            if validPlayer == False:
+                self.send_to_bar(point)
+                return True
 
         if cant > 1:
-            self.valid_player(point, player)
+            validPlayer = self.valid_player(point, player)
 
-        # if len(self.__points[point]) > 1:
-        #     self.valid_player(point, player)      
+        if cant == 5:
+            return False
 
-        # if len(self.__points[point]) == 0:
-        #     return True
-        
-        # if len(self.__points[point]) == 1:
-        #     #Aca tendria que mandar a la otra ficha al tablero
-        #     ...
-        
+        if cant == 0 or validPlayer:
+            return True
+        else:
+            return False
+
     def valid_player(self, pos, player: str):
         #Funcion para validar si un punto pertenece a un jugador o no
 
@@ -108,11 +111,16 @@ class Board:
         else:
             return False
 
+    def send_to_bar(self, pos):
+        #Esta funcion debe enviar a la barra al elemento que fue comido y eliminar del punto actual al elemento
+        ...
+
+    def make_move(self, currentPos, finalPos, player):
+        ...
 
 
 
 
 if __name__ == "__main__":
     board = Board()
-    # print(board.valid_position(0,"X"))
-    print(board.valid_player(6, "X"))
+    print(board.valid_position(7, "O"))
