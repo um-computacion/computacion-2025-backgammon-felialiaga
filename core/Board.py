@@ -26,8 +26,6 @@ class Board:
         self.__points[7] = [Checker(2) for i in range(3)]
         self.__points[5] = [Checker(2) for i in range(5)]
 
-        
-
     def get_board(self):
         #trae el tablero
         print("----- Tablero de juego -----")
@@ -74,10 +72,10 @@ class Board:
     def get_points(self):
         return self.__points
 
-    def get_bar(self):
+    def get_bar(self, player):
         return self.__bar
     
-    def get_out(self):
+    def get_out(self, player):
         return self.__out
 
     #-------------------------Validaciones-------------------------
@@ -116,11 +114,22 @@ class Board:
 
     def send_to_bar(self, pos):
         #Esta funcion debe enviar a la barra al elemento que fue comido y eliminar del punto actual al elemento
+
+        #validar que la posicion sea valida, validar que el jugador tenga una ficha en esa posicion
+        ...
+
+    def send_from_bar_to_board(self, player):
         ...
 
     def make_move(self, currentPos, finalPos, player):
         ...
 
+    def able_to_get_out(self, player):
+        ...
+
+    def send_out(self, player):
+        ...
+    
 
 
 
