@@ -1,11 +1,12 @@
 version: 2.1
 
+
 jobs:
   build:
     docker:
-      - image: cimg/python:3.10.1
+      - image: cimg/python:3.10.1 #imagen de python dockerizada 
     steps:
-      - checkout
+      - checkout #hacemos un checkout al repositorio 
       - run:
           name: Install dependencies
           command: pip install -r requirements.txt
