@@ -9,8 +9,8 @@ class Board:
     #Jugador 2: O
     def __init__(self):
         self.__points = [[] for i in range(24)]
-        self.__bar = { 1: [], 2: [] }
-        self.__out = { 1: [], 2: [] }
+        self.__bar = { 'X': [], 'O': [] }
+        self.__out = { 'X': [], 'O': [] }
 
         self.setup()
 
@@ -73,10 +73,16 @@ class Board:
         return self.__points
 
     def get_bar(self, player):
-        return self.__bar
+        if player == 1:
+            return self.__bar["X"]
+        else:
+            return self.__bar["O"]
     
     def get_out(self, player):
-        return self.__out
+        if player == 1:
+            return self.__out["X"]
+        else:
+            return self.__out["O"]
 
     #-------------------------Validaciones-------------------------
 
