@@ -3,6 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from core.Checker import Checker
+from core.exceptions import InableToGetOut
 
 class Board:
     #Jugador 1: X
@@ -128,13 +129,88 @@ class Board:
         ...
 
     def make_move(self, currentPos, finalPos, player):
+        #antes de hacer cualquier movimiento debo verificar si tengo fichas en la barra
         ...
 
-    def able_to_get_out(self, player):
-        ...
+    def able_to_get_out(self, player, point):
+        cuadrante1 = self.__points[0:6]
+        cuadrante4 = self.__points[18:24]
 
-    def send_out(self, player):
-        ...
+        totalX = 0
+        totalO = 0
+
+        if player == 1:
+
+            # que el jugador tenga todas sus fichas en el ultimo cuadrante
+            for p in cuadrante4:
+                totalX += p.count("X")
+
+            if totalX == 15:
+                valid1 = True
+            else:
+                raise InableToGetOut("Debes tener todas tus fichas en el tablero interno.")
+
+            # que la posicion en la que quiero sacar una ficha este limpio, no tenga fichas detras
+            valid2 = all('X' not in p for p in cuadrante4[:point] )
+            if valid2 == False:
+                raise InableToGetOut("No puedes tener fichas en las posiciones anteriores. Debes sacar primero las fichas que estan por detras")
+            
+            if valid1 and valid2:
+                return True
+            else: 
+                return False
+            
+
+        if player == 2:
+            # que el jugador tenga todas sus fichas en el ultimo cuadrante
+
+            for p in cuadrante1:
+                totalO += p.count("O")
+
+            if totalO == 15:
+                valid1 = True
+            else:
+                raise InableToGetOut("Debes tener todas tus fichas en el tablero interno.")
+
+
+            # que la posicion en la que quiero sacar una ficha este limpio, no tenga fichas detras
+            # valid2 = all(len(p) == 0 for p in cuadrante4[:point])
+            valid2 = all('O' not in p for p in cuadrante1[:point] )
+
+            if valid2 == False:
+                raise InableToGetOut("No puedes tener fichas en las posiciones anteriores. Debes sacar primero las fichas que estan por detras")
+
+            if valid1 and valid2:
+                return True
+            else: 
+                return False
+
+       
+
+     
+
+
+
+
+
+    def send_out(self, player: int, point):
+        #player = 1 o 2
+
+        #verificar que tenga todas las fichas en el ultimo cuadrante 
+        if player == 1:
+            ...
+
+        
+        if player == 2:
+            ...
+
+
+
+
+        #pop lo que va a hacer es eliminar el elemento de la ultima posicion 
+        self.__points[point].pop()
+
+        list(self.__out.keys())[player - 1].append(Checker(player))
     
 
 
