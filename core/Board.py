@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from core.Checker import Checker
-from core.exceptions import InableToGetOut
+from core.exceptions import InableToGetOut, InvalidPosition
 
 class Board:
     #Jugador 1: X
@@ -73,6 +73,13 @@ class Board:
     def get_points(self):
         return self.__points
 
+    def get_point(self, point):
+        
+        if 0 <= point <= 23:
+            return self.__points[point]
+        else:
+            raise InvalidPosition("La posicion no es valida")
+
     def get_bar(self, player):
         if player == 1:
             return self.__bar["X"]
@@ -85,9 +92,62 @@ class Board:
         else:
             return self.__out["O"]
 
+    def addChecker(self, pos, player):
+        
+        if 0 <= pos <= 23:
+            self.__points[pos].append(Checker(player))
+        else:
+            raise InvalidPosition("La posicion no es valida")
+
+    def deleteChecker(self, pos):
+
+        if 0 <= pos <= 23:
+            self.__points[pos].pop()
+
+
+
+
+
+    def send_to_bar(self, pos):
+        #Esta funcion debe enviar a la barra al elemento que fue comido y eliminar del punto actual al elemento
+
+        #validar que la posicion sea valida, validar que el jugador tenga una ficha en esa posicion
+        ... 
+
+    def send_from_bar_to_board(self, player):
+        ...
+
+    def send_out(self, player: int, point):
+        #player = 1 o 2
+
+        able = self.able_to_get_out(player, point)
+
+        if able:
+
+            #pop lo que va a hacer es eliminar el elemento de la ultima posicion 
+            self.__points[point].pop()
+
+            list(self.__out.keys())[player - 1].append(Checker(player))
+    
+    def make_move(self, fromPos, toPos, player):
+
+        if list(self.__bar.keys())[player - 1]:
+            self.send_from_bar_to_board(player)
+
+        validFrom = self.valid_position(fromPos, player)
+        validTo = self.valid_position(toPos, player)
+
+        if validFrom and validTo:
+            self.__points[fromPos].pop()
+            self.__points[toPos].pop(0)
+            self.__points[toPos].append(Checker(player))
+
+
+
     #-------------------------Validaciones-------------------------
 
     def valid_position(self, point, player: str):
+        #validar si la posicion destino es valida
         #Antes de validar la cantidad de fichas tengo que poder validar si son "X" o "O"
 
         cant = len(self.__points[point])
@@ -119,30 +179,18 @@ class Board:
         else:
             return False
 
-    def send_to_bar(self, pos):
-        #Esta funcion debe enviar a la barra al elemento que fue comido y eliminar del punto actual al elemento
-
-        #validar que la posicion sea valida, validar que el jugador tenga una ficha en esa posicion
-        ... 
-
-
-    def send_from_bar_to_board(self, player):
-        ...
-
     def valid_move(self, fromPos, toPos, player):
         ...
-
+        
     def make_move(self, fromPos, toPos, player):
 
-        #antes de hacer cualquier movimiento debo verificar si tengo fichas en la barra
         if list(self.__bar.keys())[player - 1]:
             self.send_from_bar_to_board(player)
 
-        #validar que tenga una ficha en la posicion donde voy a jugar
         validFrom = self.valid_position(fromPos, player)
         validTo = self.valid_position(toPos, player)
 
-        if True:
+        if validFrom and validTo:
             self.__points[fromPos].pop()
             self.__points[toPos].pop(0)
             self.__points[toPos].append(Checker(player))
@@ -201,18 +249,7 @@ class Board:
             else: 
                 return False
 
-    def send_out(self, player: int, point):
-        #player = 1 o 2
 
-        able = self.able_to_get_out(player, point)
-
-        if able:
-
-            #pop lo que va a hacer es eliminar el elemento de la ultima posicion 
-            self.__points[point].pop()
-
-            list(self.__out.keys())[player - 1].append(Checker(player))
-    
 
 
 
