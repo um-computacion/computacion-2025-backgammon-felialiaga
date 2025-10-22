@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from core.Board import Board
 # from core.Game import Game
 from core.Player import Player
+from core.Dice import Dice
 
 while True:
     print('Bienvenido a Backgammon!!!!')
@@ -32,12 +33,28 @@ while True:
 
             board.get_board()
             
-            print("1- Hacer movimiento")
+            print("1- Tirar dado")
 
             option = int(input("Ingrese la opcion: "))
 
             if option == 1:
-                board.make_move(0, 3, 1)
+                dice = Dice()
+                moves = []
+                
+                dice.throw_dice()
+
+                dice1 = dice.get_dice1()
+                dice2 = dice.get_dice2()
+
+                if dice1 == dice2:
+                    moves.extend([dice1] * 4)
+                else:
+                    moves.append(dice1)
+                    moves.append(dice2)
+
+
+                print(f"Dado 1: {dice1} \n Dado 2: {dice2}")
+                print(f"Movimineto validos: {len(moves)}")
 
 
 
