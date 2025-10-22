@@ -1,4 +1,7 @@
 import random
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 class Dice:
     def __init__(self):
@@ -18,6 +21,7 @@ class Dice:
         self.__dice1 = dice1
         self.__dice2 = dice2
         self.__total = total
+
 
     def get_dice1(self):
        
