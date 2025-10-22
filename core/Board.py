@@ -10,7 +10,7 @@ class Board:
     #Jugador 2: O
     def __init__(self):
         self.__points = [[] for i in range(24)]
-        self.__bar = { 'X': ["X","X","X","X","X",], 'O': [] }
+        self.__bar = { 'X': [], 'O': [] }
         self.__out = { 'X': [], 'O': [] }
 
         self.setup()
@@ -87,8 +87,6 @@ class Board:
         print(f"Jugador 1: {j1o} \n {"  X  " * j1o}")
         print(f"Jugador 2: {j2o} \n {"  O  " * j2o}")
 
-
-
     def get_points(self):
         return self.__points
 
@@ -122,8 +120,6 @@ class Board:
 
         if 0 <= pos <= 23:
             self.__points[pos].pop()
-
-
 
 
 
