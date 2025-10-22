@@ -123,14 +123,30 @@ class Board:
         #Esta funcion debe enviar a la barra al elemento que fue comido y eliminar del punto actual al elemento
 
         #validar que la posicion sea valida, validar que el jugador tenga una ficha en esa posicion
-        ...
+        ... 
+
 
     def send_from_bar_to_board(self, player):
         ...
 
-    def make_move(self, currentPos, finalPos, player):
-        #antes de hacer cualquier movimiento debo verificar si tengo fichas en la barra
+    def valid_move(self, fromPos, toPos, player):
         ...
+
+    def make_move(self, fromPos, toPos, player):
+
+        #antes de hacer cualquier movimiento debo verificar si tengo fichas en la barra
+        if list(self.__bar.keys())[player - 1]:
+            self.send_from_bar_to_board(player)
+
+        #validar que tenga una ficha en la posicion donde voy a jugar
+        validFrom = self.valid_position(fromPos, player)
+        validTo = self.valid_position(toPos, player)
+
+        if True:
+            self.__points[fromPos].pop()
+            self.__points[toPos].pop(0)
+            self.__points[toPos].append(Checker(player))
+
 
     def able_to_get_out(self, player, point):
         cuadrante1 = self.__points[0:6]
@@ -185,32 +201,17 @@ class Board:
             else: 
                 return False
 
-       
-
-     
-
-
-
-
-
     def send_out(self, player: int, point):
         #player = 1 o 2
 
-        #verificar que tenga todas las fichas en el ultimo cuadrante 
-        if player == 1:
-            ...
+        able = self.able_to_get_out(player, point)
 
-        
-        if player == 2:
-            ...
+        if able:
 
+            #pop lo que va a hacer es eliminar el elemento de la ultima posicion 
+            self.__points[point].pop()
 
-
-
-        #pop lo que va a hacer es eliminar el elemento de la ultima posicion 
-        self.__points[point].pop()
-
-        list(self.__out.keys())[player - 1].append(Checker(player))
+            list(self.__out.keys())[player - 1].append(Checker(player))
     
 
 

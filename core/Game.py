@@ -22,13 +22,12 @@ class Game:
         ...
         #Logica para saber quien empieza jugando
 
-    def make_move(self):
-        ...
-        #Logica para hacer un movimiento
-
     def change_turn(self):
         ...
         #Logica para el cambio de turno
+
+    def get_current_player(self):
+        ...
 
     def is_win(self): 
         #Logica para verificar si hay un ganador
@@ -76,3 +75,5 @@ if __name__ == "__main__":
 #- Extraccion:
 #   - Una vez tengamos todas las fichas en el tablero interno, tiramos los dados y vamos sacando las fichas haciendo los movimientos adecuados
 #   - Si me toca un '6' y yo tengo una ficha en la posicion 5, lo puedo sacar. Pero si tengo una ficha en la posicion 5 y 3, y me toca un '4', la ficha de la posicion 3 no la puedo sacar ya que atras no esta limpio, sigo teniendo fichas en la posicion 5
+
+#Las X van a mover hacia puntos mayores, y los O hacia puntos menores 
