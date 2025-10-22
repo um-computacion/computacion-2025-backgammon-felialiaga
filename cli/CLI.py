@@ -8,8 +8,8 @@ from core.Board import Board
 from core.Player import Player
 
 while True:
-    print('Bienvenido a Backgammon')
-    print("1. Iniciar Partida")
+    print('Bienvenido a Backgammon!!!!')
+    print("1. Iniciar Partida")   
     print("2. Mostrar Tablero(provisorio)")
     print("10. Salir")
 
@@ -24,6 +24,22 @@ while True:
 
         print(f" {jugador1.name} : X ")
         print(f" {jugador2.name} : O ")
+
+        board = Board()
+       
+
+        while True:
+
+            board.get_board()
+            
+            print("1- Hacer movimiento")
+
+            option = int(input("Ingrese la opcion: "))
+
+            if option == 1:
+                board.make_move(0, 3, 1)
+
+
 
     if(opc == 2):
         board = Board()
