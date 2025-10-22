@@ -6,3 +6,6 @@ class InvalidPosition(Exception):
 
 class InvalidPlayerNumber(Exception):
     pass
+
+class InableToGetOut(Exception):
+    pass
