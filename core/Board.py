@@ -10,7 +10,7 @@ class Board:
     #Jugador 2: O
     def __init__(self):
         self.__points = [[] for i in range(24)]
-        self.__bar = { 'X': [], 'O': [] }
+        self.__bar = { 'X': ["X","X","X","X","X",], 'O': [] }
         self.__out = { 'X': [], 'O': [] }
 
         self.setup()
@@ -69,6 +69,25 @@ class Board:
 
         for i in ["11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", "00"]:
             print(i, end="  ")
+
+        #Mostrar barra
+        print('\n Barra \n')
+        j1b = len(self.__bar["X"])
+        j2b = len(self.__bar["O"])
+
+        print(f"Jugador 1: {j1b} \n {"  X  " * j1b}")
+        print(f"Jugador 2: {j2b} \n {"  O  " * j2b}")
+
+
+        #Mostrar Home
+        print('\n Home')
+        j1o = len(self.__out["X"])
+        j2o = len(self.__out["O"])
+
+        print(f"Jugador 1: {j1o} \n {"  X  " * j1o}")
+        print(f"Jugador 2: {j2o} \n {"  O  " * j2o}")
+
+
 
     def get_points(self):
         return self.__points
