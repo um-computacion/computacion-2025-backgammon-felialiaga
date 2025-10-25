@@ -1,14 +1,6 @@
 [tool.git_changelog]
 provider = "github"
 repository = "um-computacion/computacion-2025-backgammon-felialiaga"
-convention = "conventional"
+convention = "angular"
 template = "keepachangelog"
-sections = [
-  "Features",
-  "Bug Fixes",
-  "Documentation",
-  "Refactoring",
-  "Performance",
-  "Tests",
-  "Chore"
-]
+sections = "feat,fix,refactor,docs,style,test,chore"
