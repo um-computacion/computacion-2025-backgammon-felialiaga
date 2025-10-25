@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
-# pre-commit hook que actualiza CHANGELOG.md automáticamente con configuración personalizada
+# pre-commit hook que genera un changelog con commits no tagueados
 
 if command -v git-changelog >/dev/null 2>&1; then
   echo "🔄 Generando CHANGELOG.md..."
-  git-changelog -o CHANGELOG.md --config-file .git-changelog.toml
+  git-changelog -o CHANGELOG.md --config-file .git-changelog.toml --unreleased
 
   if ! git diff --quiet -- CHANGELOG.md; then
     git add CHANGELOG.md
     echo "✅ CHANGELOG.md actualizado y agregado al commit."
+  else
+    echo "ℹ️ No hay cambios nuevos para registrar en el changelog."
   fi
 else
   echo "⚠️ git-changelog no está instalado. Ejecuta: pip install git-changelog"
