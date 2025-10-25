@@ -31,6 +31,8 @@ class Board:
         #trae el tablero
         print("----- Tablero de juego -----")
 
+        
+
         top = self.__points[12:24]
         bottom = self.__points[0:12][::-1]
         max_len = 5
