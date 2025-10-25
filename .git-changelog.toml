@@ -1,0 +1,14 @@
+[tool.git_changelog]
+provider = "github"
+repository = "um-computacion/computacion-2025-backgammon-felialiaga"
+convention = "conventional"
+template = "keepachangelog"
+sections = [
+  "Features",
+  "Bug Fixes",
+  "Documentation",
+  "Refactoring",
+  "Performance",
+  "Tests",
+  "Chore"
+]
