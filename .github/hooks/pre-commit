@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
-# pre-commit hook que actualiza CHANGELOG.md automáticamente
+# pre-commit hook que actualiza CHANGELOG.md automáticamente con configuración personalizada
 
-# Comprobar si git-changelog está instalado
 if command -v git-changelog >/dev/null 2>&1; then
   echo "🔄 Generando CHANGELOG.md..."
-  git-changelog -o CHANGELOG.md
+  git-changelog -o CHANGELOG.md --config-file .git-changelog.toml
 
-  # Si el archivo cambió, lo añadimos al commit
   if ! git diff --quiet -- CHANGELOG.md; then
     git add CHANGELOG.md
     echo "✅ CHANGELOG.md actualizado y agregado al commit."
