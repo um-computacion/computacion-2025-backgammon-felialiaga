@@ -4,6 +4,7 @@ repository = "um-computacion/computacion-2025-backgammon-felialiaga"
 convention = "angular"
 template = "keepachangelog"
 sections = [
+  { title = "Commits",   grep = ".*" },
   { title = "Features",  grep = "feat" },
   { title = "Fixes",     grep = "fix" },
   { title = "Others",    grep = ".*" }
