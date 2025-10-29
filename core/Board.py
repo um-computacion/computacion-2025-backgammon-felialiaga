@@ -3,7 +3,8 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from core.Checker import Checker
-from core.exceptions import InableToGetOut, InvalidPosition
+from core.exceptions import InableToGetOut, InvalidPosition, InvalidMove
+from core.Player import Player
 
 class Board:
     #Jugador 1: X
@@ -30,8 +31,6 @@ class Board:
     def get_board(self):
         #trae el tablero
         print("----- Tablero de juego -----")
-
-        
 
         top = self.__points[12:24]
         bottom = self.__points[0:12][::-1]
@@ -99,8 +98,9 @@ class Board:
         else:
             raise InvalidPosition("La posicion no es valida")
 
-    def get_bar(self, player):
-        if player == 1:
+    def get_bar(self, player: Player):
+        number = player.number
+        if number == 1:
             return self.__bar["X"]
         else:
             return self.__bar["O"]
@@ -111,10 +111,12 @@ class Board:
         else:
             return self.__out["O"]
 
-    def addChecker(self, pos, player):
+    def addChecker(self, pos, player:Player):
         
+        playerNb = player.number
+
         if 0 <= pos <= 23:
-            self.__points[pos].append(Checker(player))
+            self.__points[pos].append(Checker(playerNb))
         else:
             raise InvalidPosition("La posicion no es valida")
 
@@ -123,153 +125,193 @@ class Board:
         if 0 <= pos <= 23:
             self.__points[pos].pop()
 
+    #------------------------ Validaciones ------------------------------------------
 
-
-    def send_to_bar(self, pos):
-        #Esta funcion debe enviar a la barra al elemento que fue comido y eliminar del punto actual al elemento
-
-        #validar que la posicion sea valida, validar que el jugador tenga una ficha en esa posicion
-        ... 
-
-    def send_from_bar_to_board(self, player):
-        ...
-
-    def send_out(self, player: int, point):
-        #player = 1 o 2
-
-        able = self.able_to_get_out(player, point)
-
-        if able:
-
-            #pop lo que va a hacer es eliminar el elemento de la ultima posicion 
-            self.__points[point].pop()
-
-            list(self.__out.keys())[player - 1].append(Checker(player))
-    
-    def make_move(self, fromPos, toPos, player):
-
-        if list(self.__bar.keys())[player - 1]:
-            self.send_from_bar_to_board(player)
-
-        validFrom = self.valid_position(fromPos, player)
-        validTo = self.valid_position(toPos, player)
-
-        if validFrom and validTo:
-            self.__points[fromPos].pop()
-            self.__points[toPos].pop(0)
-            self.__points[toPos].append(Checker(player))
-
-
-
-    #-------------------------Validaciones-------------------------
-
-    def valid_position(self, point, player: str):
-        #validar si la posicion destino es valida
-        #Antes de validar la cantidad de fichas tengo que poder validar si son "X" o "O"
-
-        cant = len(self.__points[point])
-        validPlayer = ""
-
-        if cant == 1:
-            validPlayer = self.valid_player(point, player)
-
-            if validPlayer == False:
-                self.send_to_bar(point)
-                return True
-
-        if cant > 1:
-            validPlayer = self.valid_player(point, player)
-
-        if cant == 5:
-            return False
-
-        if cant == 0 or validPlayer:
-            return True
-        else:
-            return False
-
-    def valid_player(self, pos, player: str):
-        #Funcion para validar si un punto pertenece a un jugador o no
-
-        if str(self.__points[pos][0]) == player:
-            return True
-        else:
-            return False
-
-    def valid_move(self, fromPos, toPos, player):
-        ...
+    def is_valid_move(self, player: Player, fromPos, toPos, dice):
+        direction = player.direction()
+        token = player.token()
         
-    def make_move(self, fromPos, toPos, player):
+        #Esto validara que la posicion sea valida
+        if fromPos < 0 or fromPos > 23 or toPos < 0 or toPos > 23:
+            raise InvalidMove("Origen o destino no valido.")
+        
+        #Esto validara que en el punto de origen hayan elementos y que aparte esos elementos (en este caso se verifica con el primero) pertenezcan al jugador 
+        if not self.__points[fromPos] or self.__points[fromPos][0] != token:
+            raise InvalidMove("No tienes fichas en el punto de origen.")
+        
+        #Esto validara si la posicion de destino pertenece  a otro jugador y si tiene mas de una ficha
+        if self.__points[toPos]:
+            destinationToken = self.__points[toPos][0]
 
-        if list(self.__bar.keys())[player - 1]:
-            self.send_from_bar_to_board(player)
+            if destinationToken != token and len(self.__points[toPos]) > 1:
+                raise InvalidMove("El punto de destino pertenece a otro jugador.")
+        
+        #Esto validara que el origen mas el numero de dado, llegue al destino correcto. Se lo multiplica por la direccion ya que si esta es -1 ira para un lado y si es 1 ira para el otro
+        if toPos != fromPos + direction * dice:
+            raise InvalidMove("Destino invalido.")
+        
+    def possibles_positions(self, player: Player, fromPos, dices):
+        direction = player.direction
+        options = []
 
-        validFrom = self.valid_position(fromPos, player)
-        validTo = self.valid_position(toPos, player)
+        for d in dices:
+            destination = fromPos + direction * d
 
-        if validFrom and validTo:
-            self.__points[fromPos].pop()
-            self.__points[toPos].pop(0)
-            self.__points[toPos].append(Checker(player))
+            if 0 <= destination <= 23:
+                try:
+                    self.is_valid_move(player, fromPos, destination, d)
 
+                    if destination not in options:
+                        options.append(destination)
 
-    def able_to_get_out(self, player, point):
-        cuadrante1 = self.__points[0:6]
-        cuadrante4 = self.__points[18:24]
+                except InvalidMove:
+                    continue
+        
+        return options
 
-        totalX = 0
-        totalO = 0
+    #
+    def are_possibles_moves(self, player: Player, dices):
+        token = player.token
 
-        if player == 1:
+        for i in range(24):
+            if self.__points[i] and self.__points[i][0] == token:
+                if self.possibles_positions(player, i, dices):
+                    return True
+        return False
 
-            # que el jugador tenga todas sus fichas en el ultimo cuadrante
-            for p in cuadrante4:
-                totalX += p.count("X")
+    def destination_from_bar(self, player: Player, dice):
+        #Me indica el indice donde tendria que salir mi ficha. Si me toca un dado 5, entro a la posicion 4 que equivale al quinto punto, si la direccion es 1, en caso contrario entro desde el otro lado
+        direction = player.direction
 
-            if totalX == 15:
-                valid1 = True
-            else:
-                raise InableToGetOut("Debes tener todas tus fichas en el tablero interno.")
+        if direction == 1:
+            return dice - 1
+        else:
+            return 24 - dice
 
-            # que la posicion en la que quiero sacar una ficha este limpio, no tenga fichas detras
-            valid2 = all('X' not in p for p in cuadrante4[:point] )
-            if valid2 == False:
-                raise InableToGetOut("No puedes tener fichas en las posiciones anteriores. Debes sacar primero las fichas que estan por detras")
+    def can_reenter(self, player: Player, dice):
+        #Comprueba si se puede ingresar una ficha desde la barra. Si no puede devuelve None, si puede devuelve el indice
+        destination = self.destination_from_bar()
+        token = player.token
+
+        if destination < 0 or destination > 23:
+            return None
+
+        if not self.__points[destination]:
+            return destination
+
+        if self.__points[destination][0] == token and len(self.__points[destination]) < 5:
+            return destination
+        
+        if len(self.__points[destination]) == 1:
+            return destination
+        
+        return None
             
-            if valid1 and valid2:
-                return True
-            else: 
-                return False
+    def all_on_internal_board(self, player: Player):
+        #Verifica que todas las fichas del jugador esten en su tablero interno
+        token = player.direction
+        direction = player.direction
+
+        if self.get_bar(player):
+            return False
+        
+        #Jugador 1: tablero interno 18 - 23
+        if direction == 1:
+            for i in range(0, 18):
+
+                if self.__points[i] and self.__points[i][0] == token:
+
+                    return False
+        else:
+            for i in range(6, 24):
+                
+                if self.__points[i] and self.__points[i][0] == token:
+
+                    return False
+                
+        return True
+
+    def can_go_out(self, player: Player, fromPos, dice):
+        token = player.token
+        direction = player.direction
+        
+        #verifica que tenga todas las fichas en el tablero interno
+        if not self.all_on_internal_board(player):
+            return False
+        
+        #verifica que tenga fichas en el origen, y que aparte correspondan a un jugador
+        if not self.__points[fromPos] or self.__points[fromPos][0] != token:
+            return False
+        
+        #Aca verifico cual es la distancia necesaria para sacar un dado dependiendo de la direccion, despues esa distancia debe ser igual al dado sacado
+        distance = 0
+
+        if direction == 1:
+            distance = 24 - fromPos
+        else:
+            distance = fromPos + 1
+
+        if dice == distance:
+            return True
+        
+        if dice > distance:
             
-
-        if player == 2:
-            # que el jugador tenga todas sus fichas en el ultimo cuadrante
-
-            for p in cuadrante1:
-                totalO += p.count("O")
-
-            if totalO == 15:
-                valid1 = True
+            if direction == 1:
+                for i in range(0, fromPos):
+                    if self.__points[i] and self.__points[i][0] == token:
+                        return False
+                    
             else:
-                raise InableToGetOut("Debes tener todas tus fichas en el tablero interno.")
+                for i in range(fromPos + 1, 24):
+                    if self.__points[i] and self.__points[i][0] == token:
+                        return False
+                    
+            return True
+
+        return False
 
 
-            # que la posicion en la que quiero sacar una ficha este limpio, no tenga fichas detras
-            # valid2 = all(len(p) == 0 for p in cuadrante4[:point])
-            valid2 = all('O' not in p for p in cuadrante1[:point] )
+#--------------- Metodos --------------------------
 
-            if valid2 == False:
-                raise InableToGetOut("No puedes tener fichas en las posiciones anteriores. Debes sacar primero las fichas que estan por detras")
+    def move(self, player: Player, fromPos, toPos, dice):
+        self.is_valid_move(player, fromPos, toPos, dice)
 
-            if valid1 and valid2:
-                return True
-            else: 
-                return False
+        token = player.token
+        
+        if self.__points[toPos] and self.__points[toPos][0] != token and len(self.__points[toPos]) == 1:
+            oponent = self.__points[toPos].pop()
+            self.__bar[oponent].append(oponent)
 
+        self.deleteChecker(fromPos)
+        self.addChecker(toPos, player)
 
+    def reenter_from_bar(self, player: Player, dice):
 
+        destination = self.can_reenter
+        token = player.token
+
+        if destination == None:
+            raise InvalidMove("No se puede reingresar con ese dado.")
+        
+        self.__bar[token].pop()
+
+        #condiciones para saber si se puede capturar la ficha del oponente
+        if self.__points[destination] and self.__points[destination][0] != token and len(self.__points[destination]) == 1:
+            oponent = self.__points[destination].pop()
+
+            self.__bar[oponent].append(oponent)
+
+        self.__points[destination].append(token)
+
+    def go_out(self, player: Player, fromPos, dice):
+        if not self.can_go_out(player, fromPos, dice):
+            raise InvalidMove("La ficha no puede ser sacada")
+        
+        token = self.__points[fromPos].pop()
+
+        self.__out[token].append(token)
 
 
 if __name__ == "__main__":
     board = Board()
-    print(board.valid_position(7, "O"))
+    board.get_board()
