@@ -1,7 +1,7 @@
 [tool.git_changelog]
 provider = "github"
 repository = "um-computacion/computacion-2025-backgammon-felialiaga"
-convention = "angular"
+convention = "none"
 template = "keepachangelog"
 sections = [
   { title = "Commits",   grep = ".*" },
