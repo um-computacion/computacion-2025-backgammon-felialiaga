@@ -2,46 +2,133 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
+import random
+
 from core.Board import Board
-# from core.Dice import Dice
-# from core.Player import Player
+from core.Dice import Dice
+from core.Player import Player
+from exceptions import InvalidMove, InvalidDice, InvalidPosition
 
 class Game:
     def __init__(self):
-        self.turn = ""
+        self.__turn = 1
         self.__board = Board()
-        # self.__dice = Dice()
-        # self.__players = list[Player] = []
+        self.__dice = Dice()
+        self.__players: list[Player] = []
+        self.__remaining_moves = []
+
+    #------------- Validaciones ----------------------
+
+    def are_possibles_moves(self):
+        """
+        Verifica si el jugador tiene al menos un movimiento válido con los dados disponibles.
+
+        Retorna:
+            True  -> si existe al menos un movimiento posible
+            False -> si no hay ningún movimiento válido
+        """
+        if self.tiene_fichas_en_barra():
+            for d in self.__remaining_moves:
+                if self.__board.can_reenter(self.get_current_player(), d) is not None:
+                    return True
+            return False
+        return self.__board.are_possibles_moves(self.get_current_player(), self.__remaining_moves)
+
+    def has_on_bar(self):
+        token = self.get_current_player().token
+        
+        return self.__board.get_bar[token]
+
+    def entrance_from_bar(self):
+        # devuelve las posibles entradas desde la barra
+        entrances = []
+
+        for d in self.__remaining_moves:
+            point = self.__board.can_reenter(self.get_current_player(), d)
+
+            if point is not None:
+                entrances.append((d, point))
+
+        return entrances
+
+    def all_in_home(self):
+        return self.__board.all_on_internal_board(self.get_current_player())
+
+    def validate_origin(self, fromPos):
+        
+        points = self.__board.possibles_positions(self.get_current_player(), fromPos, self.__remaining_moves)
+
+        if not points:
+            raise InvalidPosition("El punto de origen actual no tiene moviminetos posibles.")
+        
+        return points
+
+    def is_win(self): 
+        #Logica para verificar si hay un ganador
+        player1 = self.__players[0]
+        player2 = self.__players[1]
+
+        #Cada una de las variables va a devolver la cantidad de fichas que tenemos afuera
+        if len(self.__board.get_out(player1)) == 15:
+            return player1
+        if len(self.__board.get_out(player2)) == 15 :
+            return player2
+        else:
+            print("Ninguno ha ganado, la partida sigue")
+
+#---------------- Metodos --------------------------
 
     def start_game(self):
         #Primero se hace el setup de los elementos
         ...
 
-
     def who_start(self):
-        ...
-        #Logica para saber quien empieza jugando
+        while True:
+            player1 = random.randint(1, 6)
+            player2 = random.randint(1, 6)
+
+            if player1 > player2:
+                self.__turn = 1
+                return self.__players[0]
+            elif player2 > player1:
+                self.__turn = 2
+                return self.__players[1]
+
+    def throw_dices(self):
+        self.__dice.throw_dice()
+
+        self.__remaining_moves = self.__dice.duplicate()
+        
+        return self.__remaining_moves
 
     def change_turn(self):
-        ...
-        #Logica para el cambio de turno
+        if self.__turn == 1:
+            self.__turn = 2
+        elif self.__turn == 2:
+            self.__turn = 1
 
     def get_current_player(self):
-        ...
+        if self.__turn == 1:
+            return self.__players[0]
+        elif self.__turn == 2:
+            return self.__players[1]
 
-    def is_win(self): 
-        #Logica para verificar si hay un ganador
-        player1 = len(self.__board.get_out()[1])
-        player2 = len(self.__board.get_out()[2])
+    def reenter_from_bar(self, dice):
+        if dice not in self.__remaining_moves:
+            raise InvalidDice("El dado no esta disponible.")
+        
+        self.__board.reenter_from_bar(self.get_current_player(), dice)
 
-        #Cada una de las variables va a devolver la cantidad de fichas que tenemos afuera
-        #Los prints van a ser reemplazados por atributos
-        if player1 == 15:
-            print("Jugador 1 ha ganado")
-        if player2 == 15:
-            print("Jugador 2 ha ganado")
-        else:
-            print("Ninguno ha ganado, la partida sigue")
+        self.__remaining_moves.remove(dice)
+
+    def go_out(self, fromPos, dice):
+        if dice not in self.__remaining_moves:
+            raise InvalidDice("El dado no esta disponible.")
+        
+        self.__board.go_out(self.get_current_player(), fromPos, dice)
+        
+        self.__remaining_moves.remove(dice)
+
 
 
 if __name__ == "__main__":
