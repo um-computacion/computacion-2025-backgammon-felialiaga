@@ -34,3 +34,38 @@ Respuesta:
     posicion = 2
     vacias = all(len(lista) == 0 for lista in listas[posicion:])
     print(vacias)
+
+Prompt 6: Me gustaria implementar una funcion que haga un movimiento y luego ponga ese dado como usado, y me devuelva los dados que me quedan disponibles
+Respuesta:
+🧩 Opción 1 — Versión más legible y clara (recomendada)
+def move_and_used(self, player: Player, from_pos, to_pos, dices):
+    """
+    Realiza un movimiento si es válido con los dados disponibles.
+    Devuelve la lista de dados restantes.
+    """
+    used = self.dice_move(player, from_pos, to_pos, dices)
+
+    if used is None:
+        raise InvalidMove("No puedes hacer ese movimiento con los dados disponibles.")
+
+    # Ejecutar el movimiento y devolver los dados restantes
+    self.move(player, from_pos, to_pos, used)
+    remaining_dices = [d for d in dices if d != used]
+    return remaining_dices
+
+Prompt 7: me creas alguna funcion que valide si el jugador tiene algun movimiento posible
+Respuesta: 
+    def are_possibles_moves(self):
+        """
+        Verifica si el jugador tiene al menos un movimiento válido con los dados disponibles.
+
+        Retorna:
+            True  -> si existe al menos un movimiento posible
+            False -> si no hay ningún movimiento válido
+        """
+        if self.tiene_fichas_en_barra():
+            for d in self.__remaining_moves:
+                if self.__board.can_reenter(self.get_current_player(), d) is not None:
+                    return True
+            return False
+        return self.__board.are_possibles_moves(self.get_current_player(), self.__remaining_moves)
