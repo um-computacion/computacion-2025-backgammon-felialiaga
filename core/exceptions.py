@@ -9,3 +9,6 @@ class InvalidPlayerNumber(Exception):
 
 class InableToGetOut(Exception):
     pass
+
+class InvalidDice(Exception):
+    pass
