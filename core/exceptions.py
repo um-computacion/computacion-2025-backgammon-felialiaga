@@ -12,3 +12,6 @@ class InableToGetOut(Exception):
 
 class InvalidDice(Exception):
     pass
+
+class GameError(Exception):
+    pass
