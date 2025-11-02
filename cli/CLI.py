@@ -8,7 +8,6 @@ class main:
     def mostrar_estado(self):
 
         board = self.__game__.get_board()
-        print("\n=== Estado del Tablero ===")
         board.display()
         print("==========================\n")
 
@@ -18,7 +17,6 @@ class main:
         print(" - Origen: punto desde el que moverás tu ficha (1-24, o 0 si está en la barra).")
         print(" - Destino: punto al que querés moverla (1-24, o 25 si querés sacarla del tablero).")
         print(" - Dado: valor del dado que vas a usar para ese movimiento.")
-        print("\nEjemplo: si tiraste [3, 5], podés mover desde el punto 12 al 9 (usando 3).")
         print("El sistema te avisará si un movimiento no es válido.")
         print("\nComandos disponibles durante la partida:")
         print(" - 'salir': finaliza la partida inmediatamente.")
