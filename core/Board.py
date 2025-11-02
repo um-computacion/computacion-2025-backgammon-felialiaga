@@ -1,317 +1,119 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
 from core.Checker import Checker
-from core.exceptions import InableToGetOut, InvalidPosition, InvalidMove
-from core.Player import Player
 
 class Board:
-    #Jugador 1: X
-    #Jugador 2: O
     def __init__(self):
-        self.__points = [[] for i in range(24)]
-        self.__bar = { 'X': [], 'O': [] }
-        self.__out = { 'X': [], 'O': [] }
 
-        self.setup()
+        self.__positions__ = [[] for _ in range(25)]  
+        self.__bar__ = {1: [], 2: []}   
+        self.__home__ = {1: [], 2: []}   
 
-    def setup(self):
-
-        self.__points[0] = [Checker(1) for i in range(2)]
-        self.__points[11] = [Checker(1) for i in range(5)]
-        self.__points[16] = [Checker(1) for i in range(3)]
-        self.__points[18] = [Checker(1) for i in range(5)]
-
-        self.__points[23] = [Checker(2) for i in range(2)]
-        self.__points[12] = [Checker(2) for i in range(5)]
-        self.__points[7] = [Checker(2) for i in range(3)]
-        self.__points[5] = [Checker(2) for i in range(5)]
-
-    def get_board(self):
-        #trae el tablero
-        print("----- Tablero de juego -----")
-
-        top = self.__points[12:24]
-        bottom = self.__points[0:12][::-1]
-        max_len = 5
-
-        for i in top:
-            # Agregar barras en los espacios faltantes
-
-            n = len(i)
-            
-            if n < max_len:
-                i.extend(["|"] * (max_len - n))
-
-        for i in ["12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]:
-            print(i, end="  ")
-        print(" ")
-
-        for row in range(max_len):
-            #mostrar tablero por filas
-            for i in top:
-                print(i[row], end="   ")
-            print(" ")
-
-        print("- " * 23)
-
-        for i in bottom:
-            #Aca lo primero que hago es calcular la cantidad de "|" que necesito agregar
-            n = max_len - len(i)
-
-            if n > 0:
-                i[:0] = ['|'] * n
-
-        for row in range(max_len):
-            for i in bottom:
-                print(i[row], end="   ")
-            print(" ")
-
-        for i in ["11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", "00"]:
-            print(i, end="  ")
-
-        #Mostrar barra
-        print('\n Barra \n')
-        j1b = len(self.__bar["X"])
-        j2b = len(self.__bar["O"])
-
-        print(f"Jugador 1: {j1b} \n {"  X  " * j1b}")
-        print(f"Jugador 2: {j2b} \n {"  O  " * j2b}")
+        self.__inicializar_posiciones__()
 
 
-        #Mostrar Home
-        print('\n Home')
-        j1o = len(self.__out["X"])
-        j2o = len(self.__out["O"])
+    def __inicializar_posiciones__(self):
+        self.__positions__[1]  = [Checker(1) for _ in range(2)]
+        self.__positions__[6]  = [Checker(2) for _ in range(5)]
+        self.__positions__[8]  = [Checker(2) for _ in range(3)]
+        self.__positions__[12] = [Checker(1) for _ in range(5)]
+        self.__positions__[13] = [Checker(2) for _ in range(5)]
+        self.__positions__[17] = [Checker(1) for _ in range(3)]
+        self.__positions__[19] = [Checker(1) for _ in range(5)]
+        self.__positions__[24] = [Checker(2) for _ in range(2)]
 
-        print(f"Jugador 1: {j1o} \n {"  X  " * j1o}")
-        print(f"Jugador 2: {j2o} \n {"  O  " * j2o}")
 
-    def get_points(self):
-        return self.__points
+    def get_position(self, pos: int):
+        return self.__positions__[pos] if 1 <= pos <= 24 else []
 
-    def get_point(self, point):
-        
-        if 0 <= point <= 23:
-            return self.__points[point]
-        else:
-            raise InvalidPosition("La posicion no es valida")
+    def añadir_ficha(self, pos: int, ficha: Checker):
+        if 1 <= pos <= 24:
+            self.__positions__[pos].append(ficha)
 
-    def get_bar(self, player: Player):
-        number = player.number
-        if number == 1:
-            return self.__bar["X"]
-        else:
-            return self.__bar["O"]
-    
-    def get_out(self, player):
-        if player == 1:
-            return self.__out["X"]
-        else:
-            return self.__out["O"]
-
-    def addChecker(self, pos, player:Player):
-        
-        playerNb = player.number
-
-        if 0 <= pos <= 23:
-            self.__points[pos].append(Checker(playerNb))
-        else:
-            raise InvalidPosition("La posicion no es valida")
-
-    def deleteChecker(self, pos):
-
-        if 0 <= pos <= 23:
-            self.__points[pos].pop()
-
-    #------------------------ Validaciones ------------------------------------------
-
-    def is_valid_move(self, player: Player, fromPos, toPos, dice):
-        direction = player.direction()
-        token = player.token()
-        
-        #Esto validara que la posicion sea valida
-        if fromPos < 0 or fromPos > 23 or toPos < 0 or toPos > 23:
-            raise InvalidMove("Origen o destino no valido.")
-        
-        #Esto validara que en el punto de origen hayan elementos y que aparte esos elementos (en este caso se verifica con el primero) pertenezcan al jugador 
-        if not self.__points[fromPos] or self.__points[fromPos][0] != token:
-            raise InvalidMove("No tienes fichas en el punto de origen.")
-        
-        #Esto validara si la posicion de destino pertenece  a otro jugador y si tiene mas de una ficha
-        if self.__points[toPos]:
-            destinationToken = self.__points[toPos][0]
-
-            if destinationToken != token and len(self.__points[toPos]) > 1:
-                raise InvalidMove("El punto de destino pertenece a otro jugador.")
-        
-        #Esto validara que el origen mas el numero de dado, llegue al destino correcto. Se lo multiplica por la direccion ya que si esta es -1 ira para un lado y si es 1 ira para el otro
-        if toPos != fromPos + direction * dice:
-            raise InvalidMove("Destino invalido.")
-        
-    def possibles_positions(self, player: Player, fromPos, dices):
-        direction = player.direction
-        options = []
-
-        for d in dices:
-            destination = fromPos + direction * d
-
-            if 0 <= destination <= 23:
-                try:
-                    self.is_valid_move(player, fromPos, destination, d)
-
-                    if destination not in options:
-                        options.append(destination)
-
-                except InvalidMove:
-                    continue
-        
-        return options
-
-    #
-    def are_possibles_moves(self, player: Player, dices):
-        token = player.token
-
-        for i in range(24):
-            if self.__points[i] and self.__points[i][0] == token:
-                if self.possibles_positions(player, i, dices):
-                    return True
-        return False
-
-    def destination_from_bar(self, player: Player, dice):
-        #Me indica el indice donde tendria que salir mi ficha. Si me toca un dado 5, entro a la posicion 4 que equivale al quinto punto, si la direccion es 1, en caso contrario entro desde el otro lado
-        direction = player.direction
-
-        if direction == 1:
-            return dice - 1
-        else:
-            return 24 - dice
-
-    def can_reenter(self, player: Player, dice):
-        #Comprueba si se puede ingresar una ficha desde la barra. Si no puede devuelve None, si puede devuelve el indice
-        destination = self.destination_from_bar()
-        token = player.token
-
-        if destination < 0 or destination > 23:
-            return None
-
-        if not self.__points[destination]:
-            return destination
-
-        if self.__points[destination][0] == token and len(self.__points[destination]) < 5:
-            return destination
-        
-        if len(self.__points[destination]) == 1:
-            return destination
-        
+    def sacar_ficha(self, pos: int):
+        if 1 <= pos <= 24 and self.__positions__[pos]:
+            return self.__positions__[pos].pop()
         return None
-            
-    def all_on_internal_board(self, player: Player):
-        #Verifica que todas las fichas del jugador esten en su tablero interno
-        token = player.direction
-        direction = player.direction
 
-        if self.get_bar(player):
-            return False
-        
-        #Jugador 1: tablero interno 18 - 23
-        if direction == 1:
-            for i in range(0, 18):
-
-                if self.__points[i] and self.__points[i][0] == token:
-
-                    return False
-        else:
-            for i in range(6, 24):
-                
-                if self.__points[i] and self.__points[i][0] == token:
-
-                    return False
-                
-        return True
-
-    def can_go_out(self, player: Player, fromPos, dice):
-        token = player.token
-        direction = player.direction
-        
-        #verifica que tenga todas las fichas en el tablero interno
-        if not self.all_on_internal_board(player):
-            return False
-        
-        #verifica que tenga fichas en el origen, y que aparte correspondan a un jugador
-        if not self.__points[fromPos] or self.__points[fromPos][0] != token:
-            return False
-        
-        #Aca verifico cual es la distancia necesaria para sacar un dado dependiendo de la direccion, despues esa distancia debe ser igual al dado sacado
-        distance = 0
-
-        if direction == 1:
-            distance = 24 - fromPos
-        else:
-            distance = fromPos + 1
-
-        if dice == distance:
-            return True
-        
-        if dice > distance:
-            
-            if direction == 1:
-                for i in range(0, fromPos):
-                    if self.__points[i] and self.__points[i][0] == token:
-                        return False
-                    
-            else:
-                for i in range(fromPos + 1, 24):
-                    if self.__points[i] and self.__points[i][0] == token:
-                        return False
-                    
-            return True
-
-        return False
+    def set_posicion(self, pos: int, jugador, cantidad: int):
+        if 1 <= pos <= 24:
+            self.__positions__[pos] = [
+                Checker(jugador.get_numero()) for _ in range(cantidad)
+            ]
 
 
-#--------------- Metodos --------------------------
+    def mandar_a_barra(self, jugador: int, ficha: Checker):
+        ficha.mandar_a_barra()
+        self.__bar__[jugador].append(ficha)
 
-    def move(self, player: Player, fromPos, toPos, dice):
-        self.is_valid_move(player, fromPos, toPos, dice)
+    def sacar_de_barra(self, jugador: int):
+        if self.__bar__[jugador]:
+            ficha = self.__bar__[jugador].pop()
+            ficha.sacar_de_barra()
+            return ficha
+        return None
 
-        token = player.token
-        
-        if self.__points[toPos] and self.__points[toPos][0] != token and len(self.__points[toPos]) == 1:
-            oponent = self.__points[toPos].pop()
-            self.__bar[oponent].append(oponent)
+    def mandar_a_meta(self, jugador: int, ficha: Checker):
+        ficha.mandar_a_meta()
+        self.__home__[jugador].append(ficha)
 
-        self.deleteChecker(fromPos)
-        self.addChecker(toPos, player)
+    def get_bar(self, jugador: int):
+        return self.__bar__[jugador]
 
-    def reenter_from_bar(self, player: Player, dice):
+    def get_home(self, jugador: int):
+        return self.__home__[jugador]
 
-        destination = self.can_reenter
-        token = player.token
+    def vaciar_fichas(self, jugador):
+        for i in range(1, 25):
+            self.__positions__[i] = [
+                c for c in self.__positions__[i]
+                if c.get_jugador() != jugador.get_numero()
+            ]
+        self.__home__[jugador.get_numero()] = [
+            Checker(jugador.get_numero()) for _ in range(15)
+        ]
 
-        if destination == None:
-            raise InvalidMove("No se puede reingresar con ese dado.")
-        
-        self.__bar[token].pop()
 
-        #condiciones para saber si se puede capturar la ficha del oponente
-        if self.__points[destination] and self.__points[destination][0] != token and len(self.__points[destination]) == 1:
-            oponent = self.__points[destination].pop()
+    def display(self):
 
-            self.__bar[oponent].append(oponent)
+        col_width = 6
 
-        self.__points[destination].append(token)
+        print("\n=== TABLERO DE BACKGAMMON ===\n")
 
-    def go_out(self, player: Player, fromPos, dice):
-        if not self.can_go_out(player, fromPos, dice):
-            raise InvalidMove("La ficha no puede ser sacada")
-        
-        token = self.__points[fromPos].pop()
+# --- Parte superior (13–24) ---
+        top_range = range(13, 25)
+        print("Arriba: ", "".join([f"{i:2}".center(col_width) for i in top_range]))
+        fila_top = [
+            f"{pos[0].get_jugador()}({len(pos)})".center(col_width)
+            if pos else " ".center(col_width)
+            for pos in (self.__positions__[i] for i in top_range)
+        ]
+        print("        " + "".join(fila_top))
 
-        self.__out[token].append(token)
+        print("-" * (col_width * 12 + 8))
 
+# --- Parte inferior (12–1) ---
+        bottom_range = range(12, 0, -1)
+        print("Abajo : ", "".join([f"{i:2}".center(col_width) for i in bottom_range]))
+        fila_bottom = [
+            f"{pos[0].get_jugador()}({len(pos)})".center(col_width)
+            if pos else " ".center(col_width)
+            for pos in (self.__positions__[i] for i in bottom_range)
+        ]
+        print("        " + "".join(fila_bottom))
+
+# --- Barra ---
+        print("\nBarra:")
+        print(
+            f"       J1: {len(self.__bar__[1])}".ljust(12)
+            + f"J2: {len(self.__bar__[2])}".ljust(12)
+        )
+
+# --- Home ---
+        print("\nHome:")
+        print(
+            f"       J1: {len(self.__home__[1])}".ljust(12)
+            + f"J2: {len(self.__home__[2])}".ljust(12)
+        )
 
 if __name__ == "__main__":
     board = Board()
-    board.get_board()
+    board.display()
