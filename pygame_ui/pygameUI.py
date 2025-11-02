@@ -13,6 +13,7 @@ FPS = 60
 BLANCO = (255, 255, 255)
 NEGRO = (0, 0, 0)
 MARRON_CLARO = (222, 184, 135)
+MARRON_INTERMEDIO = (181, 137, 89)
 MARRON_OSCURO = (139, 90, 43)
 VERDE = (34, 139, 34)
 ROJO = (220, 20, 60)
@@ -60,7 +61,7 @@ class BackgammonPygame:
         # Lado derecho superior: 13-18
         for i in range(6):
             x = 200 + i * ancho_triangulo
-            color = MARRON_OSCURO if i % 2 == 0 else BLANCO
+            color = MARRON_OSCURO if i % 2 == 0 else MARRON_INTERMEDIO
             puntos = [
                 (x, 100),
                 (x + ancho_triangulo, 100),
@@ -77,7 +78,7 @@ class BackgammonPygame:
         # Lado izquierdo superior: 19-24
         for i in range(6):
             x = 725 + i * ancho_triangulo
-            color = MARRON_OSCURO if i % 2 == 1 else BLANCO
+            color = MARRON_OSCURO if i % 2 == 1 else MARRON_INTERMEDIO
             puntos = [
                 (x, 100),
                 (x + ancho_triangulo, 100),
@@ -95,7 +96,7 @@ class BackgammonPygame:
         # Lado derecho inferior: 12-7
         for i in range(6):
             x = 200 + i * ancho_triangulo
-            color = BLANCO if i % 2 == 0 else MARRON_OSCURO
+            color = MARRON_INTERMEDIO if i % 2 == 0 else MARRON_OSCURO
             puntos = [
                 (x, 800),
                 (x + ancho_triangulo, 800),
@@ -112,7 +113,7 @@ class BackgammonPygame:
         # Lado izquierdo inferior: 6-1
         for i in range(6):
             x = 725 + i * ancho_triangulo
-            color = BLANCO if i % 2 == 1 else MARRON_OSCURO
+            color = MARRON_INTERMEDIO if i % 2 == 1 else MARRON_OSCURO
             puntos = [
                 (x, 800),
                 (x + ancho_triangulo, 800),

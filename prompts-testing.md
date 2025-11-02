@@ -1,0 +1,1 @@
+No encuentro los prompts, pero muchos de los tests fueron usando IA, le pasaba el codigo de la clase y le pedia que verifique cada uno de los metodos bien completo

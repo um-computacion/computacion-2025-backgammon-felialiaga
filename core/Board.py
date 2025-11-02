@@ -73,46 +73,60 @@ class Board:
 
 
     def display(self):
-
         col_width = 6
+        max_depth = 5  # profundidad visible máxima
 
         print("\n=== TABLERO DE BACKGAMMON ===\n")
 
-# --- Parte superior (13–24) ---
+        # --- Parte superior (13–24) ---
         top_range = range(13, 25)
-        print("Arriba: ", "".join([f"{i:2}".center(col_width) for i in top_range]))
-        fila_top = [
-            f"{pos[0].get_jugador()}({len(pos)})".center(col_width)
-            if pos else " ".center(col_width)
-            for pos in (self.__positions__[i] for i in top_range)
-        ]
-        print("        " + "".join(fila_top))
+        print( "       ","".join([f"{i:2}".center(col_width) for i in top_range]))
+
+        # En la parte superior, las fichas “cuelgan” desde los números hacia abajo
+        for level in range(max_depth):
+            fila = []
+            for i in top_range:
+                pos = self.__positions__[i]
+                if level < len(pos):
+                    ficha = "X" if pos[level].get_jugador() == 1 else "O"
+                    fila.append(ficha.center(col_width))
+                else:
+                    fila.append("|".center(col_width))
+            print("        " + "".join(fila))
 
         print("-" * (col_width * 12 + 8))
 
-# --- Parte inferior (12–1) ---
+        # --- Parte inferior (12–1) ---
         bottom_range = range(12, 0, -1)
-        print("Abajo : ", "".join([f"{i:2}".center(col_width) for i in bottom_range]))
-        fila_bottom = [
-            f"{pos[0].get_jugador()}({len(pos)})".center(col_width)
-            if pos else " ".center(col_width)
-            for pos in (self.__positions__[i] for i in bottom_range)
-        ]
-        print("        " + "".join(fila_bottom))
+        print( "       ","".join([f"{i:2}".center(col_width) for i in bottom_range]))
 
-# --- Barra ---
+        # En la parte inferior, las fichas “suben” desde los números hacia arriba
+        for level in range(max_depth - 1, -1, -1):
+            fila = []
+            for i in bottom_range:
+                pos = self.__positions__[i]
+                # Calcular el índice de ficha desde abajo hacia arriba
+                if len(pos) > (max_depth - 1 - level):
+                    ficha = "X" if pos[len(pos) - (max_depth - level)].get_jugador() == 1 else "O"
+                    fila.append(ficha.center(col_width))
+                else:
+                    fila.append("|".center(col_width))
+            print("        " + "".join(fila))
+
+        # --- Barra ---
         print("\nBarra:")
         print(
             f"       J1: {len(self.__bar__[1])}".ljust(12)
             + f"J2: {len(self.__bar__[2])}".ljust(12)
         )
 
-# --- Home ---
+        # --- Home ---
         print("\nHome:")
         print(
             f"       J1: {len(self.__home__[1])}".ljust(12)
             + f"J2: {len(self.__home__[2])}".ljust(12)
         )
+
 
 if __name__ == "__main__":
     board = Board()
