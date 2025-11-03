@@ -1,0 +1,1 @@
+Le pregunte a la IA sobre como hacer el archivo changelog, y me guio paso a paso en la implementacion de git-changelog.
